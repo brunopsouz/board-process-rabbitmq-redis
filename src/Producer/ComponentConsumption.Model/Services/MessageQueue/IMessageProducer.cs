@@ -1,4 +1,4 @@
-﻿namespace ComponentConsumption.Model.Services
+﻿namespace ComponentConsumption.Model.Services.MessageQueue
 {
     public interface IMessageProducer
     {
