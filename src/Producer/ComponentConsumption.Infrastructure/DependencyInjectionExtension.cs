@@ -13,11 +13,11 @@ namespace ComponentConsumption.Infrastructure
 {
     public static class DependencyInjectionExtension
     {
-        public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration, IDatabase database)
+        public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             AddQueue(services, configuration);
             AddDbContext(services);
-            AddCache(services, configuration, database);
+            AddCache(services, configuration);
         }
 
         private static void AddDbContext(IServiceCollection services)
@@ -39,21 +39,15 @@ namespace ComponentConsumption.Infrastructure
             services.AddScoped<IMessageProducer, RabbitMqProducer>();
         }
 
-        private static void AddCache(IServiceCollection services, IConfiguration configuration, IDatabase database)
+        private static void AddCache(IServiceCollection services, IConfiguration configuration)
         {
-            
-            var connectionString = configuration.GetValue<string>("ConnectionStrings:Redis");
-            
-            if (string.IsNullOrWhiteSpace(connectionString))
-                return;
-            
-            var redis = ConnectionMultiplexer.Connect(connectionString);
 
-            database = redis.GetDatabase();
+            services.Configure<RedisSettings>(options =>
+            {
+                options.Database = configuration["ConnectionStrings:Redis"]!;
+            });
 
-            services.AddSingleton<IRedisCacheService>(c =>
-                new RedisCacheService(database)
-            );
+            services.AddSingleton<IRedisCacheService, RedisCacheService>();
         }
     }
 }

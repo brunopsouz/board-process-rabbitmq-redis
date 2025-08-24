@@ -1,15 +1,26 @@
 ﻿using ComponentConsumption.Model.Services.Cache;
+using ComponentConsumption.Model.SettingsExtensions;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
 namespace ComponentConsumption.Infrastructure.Services.Cache
 {
     public class RedisCacheService : IRedisCacheService
     {
-        private IDatabase _database;
+        private readonly IDatabase _database;
+        private readonly IOptions<RedisSettings> _options;
 
-        public RedisCacheService(IDatabase database)
+
+        public RedisCacheService(
+            IDatabase database,
+            IOptions<RedisSettings> options)
         {
             _database = database;
+            _options = options;
+
+            var settings = _options.Value;
+            var redis = ConnectionMultiplexer.Connect(settings.Database);
+            _database = redis.GetDatabase();
         }
 
         public async Task<int> GetLastConsumedIdAsync()
@@ -22,5 +33,7 @@ namespace ComponentConsumption.Infrastructure.Services.Cache
         {
             await _database.StringSetAsync("LastConsumedId", id);
         }
+
+        
     }
 }

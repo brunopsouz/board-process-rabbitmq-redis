@@ -1,7 +1,9 @@
-﻿namespace ComponentConsumption.Model.Services.MessageQueue
+﻿using ComponentConsumption.Model.Models;
+
+namespace ComponentConsumption.Model.Services.MessageQueue
 {
     public interface IMessageProducer
     {
-        void SendingMessage<T>(T message);
+        Task SendingMessage(ComponentConsumptionModel components);
     }
 }

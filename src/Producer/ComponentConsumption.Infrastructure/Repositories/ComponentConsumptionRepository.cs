@@ -20,5 +20,6 @@ namespace ComponentConsumption.Infrastructure.Repositories
 
             return models;
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using ComponentConsumption.Model.Services.MessageQueue;
+﻿using ComponentConsumption.Model.Models;
+using ComponentConsumption.Model.Services.MessageQueue;
 using ComponentConsumption.Model.Services.MessageQueue.RabbitMQ;
 using RabbitMQ.Client;
 using System.Text;
@@ -15,7 +16,7 @@ namespace ComponentConsumption.Infrastructure.Services.MessageQueue.RabbitMQ
             _connection = connection;
         }
 
-        public async void SendingMessage<T>(T message)
+        public async Task SendingMessage(ComponentConsumptionModel components)
         {
             using var channel = await _connection.GetConnection().CreateChannelAsync();
 
@@ -26,7 +27,7 @@ namespace ComponentConsumption.Infrastructure.Services.MessageQueue.RabbitMQ
                 autoDelete: false,
                 arguments: null);
 
-            var json = JsonSerializer.Serialize(message);
+            var json = JsonSerializer.Serialize(components);
             var body = Encoding.UTF8.GetBytes(json);
 
             await channel.BasicPublishAsync(
@@ -36,7 +37,7 @@ namespace ComponentConsumption.Infrastructure.Services.MessageQueue.RabbitMQ
                 basicProperties: new BasicProperties { Persistent = true },
                 body: body);
 
-            Console.WriteLine($"Sent - {message}");
+            Console.WriteLine($"Sent - {components}");
             await Task.Delay(3000);
 
         }
