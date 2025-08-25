@@ -1,4 +1,5 @@
-﻿using ComponentConsumption.Application.Service;
+﻿using ComponentConsumption.Application;
+using ComponentConsumption.Application.Service;
 using ComponentConsumption.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,19 +14,10 @@ var builder = Host.CreateDefaultBuilder(args)
                 .Build();
 
         //services.AddSingleton<IComponentRepository, ComponentRepository>();
+        services.AddApplication(configuration);
         services.AddInfrastructure(configuration);
 
-        //services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
-        //services.AddSingleton<IRedisCacheService, RedisCacheService>();
-        //services.AddScoped<ComponentService>();
-
-
-       
-        
-
     }).Build();
-
-
 
 var service = builder.Services.GetRequiredService<GetComponentConsumption>();
 await service.RunAsync();

@@ -1,13 +1,14 @@
 ﻿using ComponentConsumption.Infrastructure.DataAccess;
+using ComponentConsumption.Infrastructure.Repositories;
 using ComponentConsumption.Infrastructure.Services.Cache;
 using ComponentConsumption.Infrastructure.Services.MessageQueue.RabbitMQ;
+using ComponentConsumption.Model.Repositories;
 using ComponentConsumption.Model.Services.Cache;
 using ComponentConsumption.Model.Services.MessageQueue;
 using ComponentConsumption.Model.Services.MessageQueue.RabbitMQ;
 using ComponentConsumption.Model.SettingsExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
 
 namespace ComponentConsumption.Infrastructure
 {
@@ -15,6 +16,7 @@ namespace ComponentConsumption.Infrastructure
     {
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            AddRepositories(services);
             AddQueue(services, configuration);
             AddDbContext(services);
             AddCache(services, configuration);
@@ -23,6 +25,11 @@ namespace ComponentConsumption.Infrastructure
         private static void AddDbContext(IServiceCollection services)
         {
             services.AddScoped<DatabaseFactory>();
+        }
+
+        private static void AddRepositories(IServiceCollection services)
+        {
+            services.AddScoped<IComponentConsumptionRepository, ComponentConsumptionRepository>();
         }
 
         private static void AddQueue(IServiceCollection services, IConfiguration configuration)
