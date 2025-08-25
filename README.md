@@ -16,11 +16,15 @@ O projeto simula um pipeline de `mensageria` voltado ao consumo de componentes d
 - SQL Server
 
 ## Como executar:
+- Baixe e instale o Docker:
+```bash
+https://www.docker.com/products/docker-desktop/
+```
 - Clone o repositorio:
 ```bash
 https://github.com/brunopsouz/board-process-rabbitmq-redis.git
 ```
 - Up the Docker containers:
 ```bash
-docker-compose up -d
+docker-compose up --build -d
 ```
