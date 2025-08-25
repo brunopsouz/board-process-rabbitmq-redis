@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
@@ -16,17 +18,6 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
-    networks:
-      - board-network
-
-  producer:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: component-consumption
-    depends_on:
-      - rabbitmq
-      - redis
     networks:
       - board-network
 

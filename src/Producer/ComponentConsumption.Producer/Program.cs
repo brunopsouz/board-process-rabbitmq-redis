@@ -19,10 +19,7 @@ var host = Host.CreateDefaultBuilder(args)
     })
     .Build();
 
-// Criamos um escopo para pegar serviços Scoped
-using var scope = host.Services.CreateScope();
+await host.StartAsync();
 
-// Resolve pelo contrato (IGetComponentConsumption) registrado no DI
-var service = scope.ServiceProvider.GetRequiredService<IGetComponentConsumption>();
-
+var service = host.Services.GetRequiredService<IGetComponentConsumption>();
 await service.RunAsync();

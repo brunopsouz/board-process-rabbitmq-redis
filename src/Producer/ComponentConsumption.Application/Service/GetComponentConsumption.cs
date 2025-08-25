@@ -39,11 +39,8 @@ namespace ComponentConsumption.Application.Service
 
                     Console.WriteLine($"Sent message: {component.BoardType},{component.ComponentDescription} ");
 
-                    await Task.Delay(3000);
-
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(30));
             }
         }
     }

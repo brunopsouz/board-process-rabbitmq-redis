@@ -34,12 +34,12 @@ namespace ComponentConsumption.Infrastructure
 
         private static void AddQueue(IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<RabbitMqSettings>(options =>
-            {
-                options.HostName = configuration["RabbitMq:HostName"]!;
-                options.UserName = configuration["RabbitMq:UserName"]!;
-                options.Password = configuration["RabbitMq:Password"]!;
-            });
+            services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMq"));
+
+            services.AddHostedService<RabbitMqInitializer>();
+
+            services.AddSingleton<IRabbitMqFactoryProvider, RabbitMqFactoryProvider>();
+            services.AddSingleton<IRetryPolicyProvider, RabbitMqRetryPolicyProvider>();
 
             services.AddSingleton<IRabbitMqConnection, RabbitMqConnection>();
 
