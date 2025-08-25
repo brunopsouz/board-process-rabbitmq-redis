@@ -12,10 +12,8 @@ namespace ComponentConsumption.Infrastructure.Services.Cache
 
 
         public RedisCacheService(
-            IDatabase database,
             IOptions<RedisSettings> options)
         {
-            _database = database;
             _options = options;
 
             var settings = _options.Value;

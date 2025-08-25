@@ -10,7 +10,7 @@ namespace ComponentConsumption.Infrastructure.Services.MessageQueue.RabbitMQ
     {
         private readonly IConnection _connection;
 
-        public RabbitMqConnection(IOptions<RabbitMqSettings> options, IConnection connection)
+        public RabbitMqConnection(IOptions<RabbitMqSettings> options)
         {
             var settings = options.Value;
             var factory = new ConnectionFactory
@@ -20,7 +20,7 @@ namespace ComponentConsumption.Infrastructure.Services.MessageQueue.RabbitMQ
                 Password = settings.Password,
             };
 
-            _connection = connection = (IConnection)factory.CreateConnectionAsync();
+            _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
         }
 
         public IConnection GetConnection() => _connection;
